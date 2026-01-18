@@ -5,6 +5,7 @@ export const exportBpmnXml = (diagram: Diagram) => {
 <!-- TODO: Implement BPMN 2.0 XML export. Diagram name: ${diagram.metadata.name} -->`;
 };
 
-export const importBpmnXml = (_raw: string) => {
+export const importBpmnXml = (raw: string) => {
+  void raw;
   throw new Error('Import BPMN XML: TODO');
 };

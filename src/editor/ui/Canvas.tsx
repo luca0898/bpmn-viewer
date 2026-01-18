@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import clsx from 'clsx';
 import { useEditorStore } from '../state/editorStore';
 import type { EdgeBase, NodeBase, NodeType } from '../model/types';
 import { clamp, GRID_SIZE, rectsIntersect, screenToWorld, worldToScreen } from '../model/geometry';
@@ -93,7 +92,11 @@ export function Canvas() {
         }
       }
       if (event.key === 'z' && (event.ctrlKey || event.metaKey)) {
-        event.shiftKey ? useEditorStore.getState().redo() : useEditorStore.getState().undo();
+        if (event.shiftKey) {
+          useEditorStore.getState().redo();
+        } else {
+          useEditorStore.getState().undo();
+        }
       }
       if (event.key === 'y' && (event.ctrlKey || event.metaKey)) {
         useEditorStore.getState().redo();
@@ -327,6 +330,9 @@ export function Canvas() {
       return null;
     }
     const mid = edge.waypoints[Math.floor(edge.waypoints.length / 2)];
+    if (!mid) {
+      return null;
+    }
     return worldToScreen({ x: mid.x, y: mid.y }, viewport);
   })();
 

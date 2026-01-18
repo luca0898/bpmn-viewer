@@ -35,7 +35,7 @@ describe('commandFactory', () => {
       width: 60,
       height: 60,
       documentation: '',
-      properties: { eventType: 'start' },
+      properties: { eventType: 'start' as const },
     };
     const command = addNodeCommand(node);
     const next = command.execute(baseDiagram);
@@ -47,8 +47,8 @@ describe('commandFactory', () => {
   it('moves nodes and restores positions', () => {
     const command = moveNodesCommand([{ id: 'task', x: 200, y: 200 }]);
     const next = command.execute(baseDiagram);
-    expect(next.nodes[0].x).toBe(200);
+    expect(next.nodes[0]?.x).toBe(200);
     const previous = command.undo(next);
-    expect(previous.nodes[0].x).toBe(100);
+    expect(previous.nodes[0]?.x).toBe(100);
   });
 });

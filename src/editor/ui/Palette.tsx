@@ -28,7 +28,11 @@ export function Palette() {
     if (selection.type !== 'node' || selection.ids.length !== 1) {
       return [];
     }
-    const node = getNodeById(diagram, selection.ids[0]);
+    const selectedId = selection.ids[0];
+    if (!selectedId) {
+      return [];
+    }
+    const node = getNodeById(diagram, selectedId);
     if (!node) {
       return [];
     }

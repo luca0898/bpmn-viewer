@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import type { Command } from './commandTypes';
-import type { Diagram, EdgeBase, NodeBase } from '../model/types';
+import type { EdgeBase, NodeBase } from '../model/types';
 import { updateEdgesForNodes } from '../model/modelUtils';
 
 export const addNodeCommand = (node: NodeBase): Command => ({
