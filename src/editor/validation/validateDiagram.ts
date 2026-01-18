@@ -16,6 +16,22 @@ const isGateway = (node: NodeBase) =>
 
 export const validateDiagram = (diagram: Diagram): EditorIssue[] => {
   const issues: EditorIssue[] = [];
+  const startEvents = diagram.nodes.filter((node) => node.type === 'startEvent');
+  const endEvents = diagram.nodes.filter((node) => node.type === 'endEvent');
+  if (startEvents.length > 1) {
+    issues.push({
+      id: 'start-unique',
+      severity: 'error',
+      message: 'Start event deve ser único.',
+    });
+  }
+  if (endEvents.length > 1) {
+    issues.push({
+      id: 'end-unique',
+      severity: 'error',
+      message: 'End event deve ser único.',
+    });
+  }
   diagram.nodes.forEach((node) => {
     if (node.type === 'startEvent' && hasIncoming(diagram, node.id)) {
       issues.push({
@@ -24,6 +40,17 @@ export const validateDiagram = (diagram: Diagram): EditorIssue[] => {
         message: 'Start event não pode ter fluxo de entrada.',
         elementId: node.id,
       });
+    }
+    if (node.type === 'startEvent') {
+      const outgoing = getOutgoing(diagram, node.id).filter((edge) => edge.type === 'sequence');
+      if (outgoing.length > 1) {
+        issues.push({
+          id: `start-outgoing-${node.id}`,
+          severity: 'error',
+          message: 'Start event só pode ter uma saída.',
+          elementId: node.id,
+        });
+      }
     }
     if (node.type === 'endEvent' && hasOutgoing(diagram, node.id)) {
       issues.push({

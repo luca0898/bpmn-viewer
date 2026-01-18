@@ -129,4 +129,25 @@ describe('validateDiagram', () => {
     const issues = validateDiagram(diagram);
     expect(issues.some((issue) => issue.message.includes('Gateway XOR'))).toBe(true);
   });
+
+  it('flags start event with multiple outgoing flows', () => {
+    const diagram: Diagram = {
+      ...baseDiagram,
+      edges: [
+        ...baseDiagram.edges,
+        {
+          id: 'edge-3',
+          type: 'sequence',
+          sourceId: 'start',
+          targetId: 'end',
+          waypoints: [
+            { x: 0, y: 0 },
+            { x: 400, y: 0 },
+          ],
+        },
+      ],
+    };
+    const issues = validateDiagram(diagram);
+    expect(issues.some((issue) => issue.message.includes('uma saída'))).toBe(true);
+  });
 });

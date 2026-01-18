@@ -20,11 +20,18 @@ npm run dev
 
 ## Atalhos principais
 
-- **Pan**: segure `Space` + arraste (ou botão do meio do mouse).
-- **Zoom**: `Ctrl + scroll` (com zoom para o cursor).
+- **Pan**: arraste com o botão direito do mouse (ou `Space` + arraste).
+- **Zoom**: scroll do mouse (com zoom para o cursor).
 - **Undo/Redo**: `Ctrl + Z`, `Ctrl + Shift + Z` ou `Ctrl + Y`.
-- **Delete**: `Delete` ou `Backspace` para remover seleção.
+- **Delete**: `Delete` para remover seleção.
 - **Edição inline**: duplo clique no nome de um nó ou no label da edge.
+
+## Mouse & Keyboard
+
+- **Pan**: botão direito + arraste (RMB). `Space` + arraste continua disponível.
+- **Zoom**: wheel (zoom no cursor).
+- **Marquee**: botão esquerdo + arraste em área vazia para selecionar nós.
+- **Delete**: tecla `Delete` remove a seleção.
 
 ## Funcionalidades V1
 

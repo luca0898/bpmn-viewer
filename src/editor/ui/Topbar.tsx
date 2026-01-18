@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { useEditorStore } from '../state/editorStore';
 import { createInitialDiagram } from '../model/initialDiagram';
-import { exportDiagramJson } from '../io/jsonIO';
+import { exportDiagramJson, importDiagramJson } from '../io/jsonIO';
 import { exportDiagramSvg } from '../io/exportSvg';
 
 const computeDiagramBounds = (diagram: ReturnType<typeof useEditorStore.getState>['diagram']) => {
@@ -80,7 +80,7 @@ export function Topbar() {
     file
       .text()
       .then((text) => {
-        setDiagram(JSON.parse(text));
+        setDiagram(importDiagramJson(text));
         addToast('JSON importado.', 'success');
       })
       .catch(() => addToast('Falha ao importar JSON.', 'error'));
