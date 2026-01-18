@@ -1,13 +1,11 @@
 import { useMemo } from 'react';
-import { ArrowRightCircle, Diamond, GitFork, LayoutPanelTop, Square, User } from 'lucide-react';
+import { Diamond, GitFork, LayoutPanelTop, Square, User } from 'lucide-react';
 import { useEditorStore } from '../state/editorStore';
 import { createNode } from '../model/nodeFactory';
 import { addNodeCommand } from '../commands/commandFactory';
 import { getNodeById } from '../model/modelUtils';
 
 const paletteItems = [
-  { type: 'startEvent', label: 'Start Event', icon: ArrowRightCircle },
-  { type: 'endEvent', label: 'End Event', icon: ArrowRightCircle },
   { type: 'task', label: 'Task', icon: Square },
   { type: 'userTask', label: 'User Task', icon: User },
   { type: 'serviceTask', label: 'Service Task', icon: GitFork },

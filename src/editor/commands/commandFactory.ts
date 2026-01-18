@@ -151,6 +151,21 @@ export const addEdgeCommand = (edge: EdgeBase): Command => ({
   }),
 });
 
+export const addNodeAndEdgeCommand = (node: NodeBase, edge: EdgeBase): Command => ({
+  id: nanoid(),
+  label: `Add ${node.type} with connection`,
+  execute: (diagram) => ({
+    ...diagram,
+    nodes: [...diagram.nodes, node],
+    edges: [...diagram.edges, edge],
+  }),
+  undo: (diagram) => ({
+    ...diagram,
+    nodes: diagram.nodes.filter((item) => item.id !== node.id),
+    edges: diagram.edges.filter((item) => item.id !== edge.id),
+  }),
+});
+
 export const deleteEdgesCommand = (edgeIds: string[]): Command => {
   let before: EdgeBase[] = [];
   return {
