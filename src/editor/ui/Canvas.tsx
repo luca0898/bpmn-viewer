@@ -167,6 +167,15 @@ export function Canvas() {
     setViewport(nextViewport);
   };
 
+  const getCanvasPoint = (clientX: number, clientY: number) => {
+    const container = containerRef.current;
+    if (!container) {
+      return { x: clientX, y: clientY };
+    }
+    const rect = container.getBoundingClientRect();
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  };
+
   const isInteractiveTarget = (target: EventTarget | null) => {
     if (!(target instanceof HTMLElement)) {
       return false;
@@ -208,7 +217,8 @@ export function Canvas() {
       ? selection.ids
       : [node.id];
     setSelection({ ids: selectedIds, type: 'node' });
-    const world = screenToWorld({ x: event.clientX, y: event.clientY }, viewport);
+    const point = getCanvasPoint(event.clientX, event.clientY);
+    const world = screenToWorld(point, viewport);
     const positions: Record<string, { x: number; y: number }> = {};
     selectedIds.forEach((id) => {
       const item = diagram.nodes.find((n) => n.id === id);
@@ -223,7 +233,8 @@ export function Canvas() {
     event.preventDefault();
     event.stopPropagation();
     event.currentTarget.setPointerCapture(event.pointerId);
-    const world = screenToWorld({ x: event.clientX, y: event.clientY }, viewport);
+    const point = getCanvasPoint(event.clientX, event.clientY);
+    const world = screenToWorld(point, viewport);
     setResizing({
       id: node.id,
       origin: world,
@@ -242,7 +253,8 @@ export function Canvas() {
     if (event.button === 0 && !isInteractiveTarget(event.target)) {
       event.preventDefault();
       event.currentTarget.setPointerCapture(event.pointerId);
-      const world = screenToWorld({ x: event.clientX, y: event.clientY }, viewport);
+      const point = getCanvasPoint(event.clientX, event.clientY);
+      const world = screenToWorld(point, viewport);
       setMarquee({ start: world, current: world, additive: event.shiftKey });
       if (!event.shiftKey) {
         setSelection({ ids: [], type: 'none' });
@@ -266,13 +278,15 @@ export function Canvas() {
     }
     if (marquee) {
       event.preventDefault();
-      const world = screenToWorld({ x: event.clientX, y: event.clientY }, viewport);
+      const point = getCanvasPoint(event.clientX, event.clientY);
+      const world = screenToWorld(point, viewport);
       setMarquee({ ...marquee, current: world });
       return;
     }
     if (dragState) {
       event.preventDefault();
-      const world = screenToWorld({ x: event.clientX, y: event.clientY }, viewport);
+      const point = getCanvasPoint(event.clientX, event.clientY);
+      const world = screenToWorld(point, viewport);
       const dx = world.x - dragState.origin.x;
       const dy = world.y - dragState.origin.y;
       const currentPositions = dragState.ids.reduce<Record<string, { x: number; y: number }>>(
@@ -303,7 +317,8 @@ export function Canvas() {
     }
     if (resizing) {
       event.preventDefault();
-      const world = screenToWorld({ x: event.clientX, y: event.clientY }, viewport);
+      const point = getCanvasPoint(event.clientX, event.clientY);
+      const world = screenToWorld(point, viewport);
       const width = Math.max(120, resizing.size.width + (world.x - resizing.origin.x));
       const height = Math.max(80, resizing.size.height + (world.y - resizing.origin.y));
       setResizing({ ...resizing, current: { width, height } });
@@ -311,7 +326,8 @@ export function Canvas() {
     }
     if (connecting) {
       event.preventDefault();
-      const world = screenToWorld({ x: event.clientX, y: event.clientY }, viewport);
+      const point = getCanvasPoint(event.clientX, event.clientY);
+      const world = screenToWorld(point, viewport);
       setConnecting({ ...connecting, current: world });
     }
   };
