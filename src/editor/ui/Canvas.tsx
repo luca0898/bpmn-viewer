@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { useEditorStore } from '../state/editorStore';
 import type { EdgeBase, NodeBase, NodeType } from '../model/types';
@@ -225,7 +225,7 @@ export function Canvas() {
     }
   };
 
-  const handlePointerUp = () => {
+  const finishInteraction = useCallback(() => {
     if (isPanning) {
       setIsPanning(false);
     }
@@ -276,7 +276,30 @@ export function Canvas() {
       }
       setConnecting(null);
     }
+  }, [
+    addToast,
+    connecting,
+    diagram,
+    dragState,
+    hoverNodeId,
+    isPanning,
+    resizing,
+    runCommand,
+  ]);
+
+  const handlePointerUp = () => {
+    finishInteraction();
   };
+
+  useEffect(() => {
+    const handler = () => finishInteraction();
+    window.addEventListener('pointerup', handler);
+    window.addEventListener('pointercancel', handler);
+    return () => {
+      window.removeEventListener('pointerup', handler);
+      window.removeEventListener('pointercancel', handler);
+    };
+  }, [finishInteraction]);
 
   const handleEdgeClick = (edge: EdgeBase) => {
     setSelection({ ids: [edge.id], type: 'edge' });
