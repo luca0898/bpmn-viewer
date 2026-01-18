@@ -63,7 +63,7 @@ export function PropertiesPanel() {
             type="checkbox"
             checked={selectedEdge.isDefault ?? false}
             onChange={(event) => {
-              const beforeEdges = structuredClone(diagram.edges);
+              const beforeEdges = diagram.edges;
               const nextEdges = enforceGatewayDefaults(
                 diagram.edges.map((edge) =>
                   edge.id === selectedEdge.id ? { ...edge, isDefault: event.target.checked } : edge,

@@ -25,8 +25,7 @@ export const updateNodeCommand = (nodeId: string, updates: Partial<NodeBase>): C
     id: nanoid(),
     label: 'Update node',
     execute: (diagram) => {
-      const current = diagram.nodes.find((node) => node.id === nodeId);
-      before = current ? structuredClone(current) : undefined;
+      before = diagram.nodes.find((node) => node.id === nodeId);
       return {
         ...diagram,
         nodes: diagram.nodes.map((node) =>
@@ -52,9 +51,7 @@ export const moveNodesCommand = (moves: Array<{ id: string; x: number; y: number
     id: nanoid(),
     label: moves.length > 1 ? 'Move nodes' : 'Move node',
     execute: (diagram) => {
-      before = structuredClone(
-        diagram.nodes.filter((node) => moves.some((move) => move.id === node.id)),
-      );
+      before = diagram.nodes.filter((node) => moves.some((move) => move.id === node.id));
       const updatedNodes = diagram.nodes.map((node) => {
         const move = moves.find((entry) => entry.id === node.id);
         if (!move) {
@@ -88,8 +85,7 @@ export const resizeNodeCommand = (nodeId: string, width: number, height: number)
     id: nanoid(),
     label: 'Resize node',
     execute: (diagram) => {
-      const current = diagram.nodes.find((node) => node.id === nodeId);
-      before = current ? structuredClone(current) : undefined;
+      before = diagram.nodes.find((node) => node.id === nodeId);
       const updatedNodes = diagram.nodes.map((node) =>
         node.id === nodeId ? { ...node, width, height } : node,
       );
@@ -122,11 +118,9 @@ export const deleteNodesCommand = (nodeIds: string[]): Command => {
     id: nanoid(),
     label: 'Delete selection',
     execute: (diagram) => {
-      beforeNodes = structuredClone(diagram.nodes.filter((node) => nodeIds.includes(node.id)));
-      beforeEdges = structuredClone(
-        diagram.edges.filter(
-          (edge) => nodeIds.includes(edge.sourceId) || nodeIds.includes(edge.targetId),
-        ),
+      beforeNodes = diagram.nodes.filter((node) => nodeIds.includes(node.id));
+      beforeEdges = diagram.edges.filter(
+        (edge) => nodeIds.includes(edge.sourceId) || nodeIds.includes(edge.targetId),
       );
       return {
         ...diagram,
@@ -163,7 +157,7 @@ export const deleteEdgesCommand = (edgeIds: string[]): Command => {
     id: nanoid(),
     label: 'Delete edges',
     execute: (diagram) => {
-      before = structuredClone(diagram.edges.filter((edge) => edgeIds.includes(edge.id)));
+      before = diagram.edges.filter((edge) => edgeIds.includes(edge.id));
       return {
         ...diagram,
         edges: diagram.edges.filter((edge) => !edgeIds.includes(edge.id)),
@@ -182,8 +176,7 @@ export const updateEdgeCommand = (edgeId: string, updates: Partial<EdgeBase>): C
     id: nanoid(),
     label: 'Update edge',
     execute: (diagram) => {
-      const current = diagram.edges.find((edge) => edge.id === edgeId);
-      before = current ? structuredClone(current) : undefined;
+      before = diagram.edges.find((edge) => edge.id === edgeId);
       return {
         ...diagram,
         edges: diagram.edges.map((edge) =>
